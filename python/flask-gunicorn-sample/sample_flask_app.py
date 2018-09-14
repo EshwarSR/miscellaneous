@@ -1,7 +1,15 @@
 from flask import Flask
 import time
 from concurrent.futures import ThreadPoolExecutor
+
+from werkzeug.contrib.profiler import ProfilerMiddleware
+# from app import app
 app = Flask(__name__)
+
+app.config['PROFILE'] = True
+app.wsgi_app = ProfilerMiddleware(app.wsgi_app, sort_by=('cumtime','time') ,restrictions=[30])
+# https://docs.python.org/3/library/profile.html#pstats.Stats.sort_stats
+# https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling
 
 def mysleep3(n):
     time.sleep(3)
