@@ -23,7 +23,7 @@ class myparallel:
 				executor = ThreadPoolExecutor(max_workers=2)
 				a = executor.submit(self.mysleep3,30)
 				b = executor.submit(self.mysleep5,50)
-				d = a.result(timeout=1) + b.result(timeout=10)
+				d = a.result(timeout=10) + b.result(timeout=10)
 				print(d)
 				executor.shutdown()
 
