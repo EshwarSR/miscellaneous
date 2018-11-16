@@ -8,8 +8,15 @@ from werkzeug.contrib.profiler import ProfilerMiddleware
 app = Flask(__name__, template_folder="templates")
 
 # app.config['PROFILE'] = True
-# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, sort_by=('cumtime','time') ,restrictions=[30])
-
+# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, sort_by=('tottime','time') ,restrictions=[30])
+"""
+ncalls: number of times this function was called.
+tottime: total time spent inside this function.
+percall: this is tottime divided by ncalls.
+cumtime: total time spent inside this function and any functions called from it.
+percall: cumtime divided by ncalls.
+filename:lineno(function): the function name and location.
+"""
 # https://docs.python.org/3/library/profile.html#pstats.Stats.sort_stats
 # https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling
 
