@@ -1,13 +1,15 @@
-from flask import Flask
+from flask import Flask, render_template, request, jsonify
+import json
 import time
 from concurrent.futures import ThreadPoolExecutor
 
 from werkzeug.contrib.profiler import ProfilerMiddleware
 # from app import app
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 
-app.config['PROFILE'] = True
-app.wsgi_app = ProfilerMiddleware(app.wsgi_app, sort_by=('cumtime','time') ,restrictions=[30])
+# app.config['PROFILE'] = True
+# app.wsgi_app = ProfilerMiddleware(app.wsgi_app, sort_by=('cumtime','time') ,restrictions=[30])
+
 # https://docs.python.org/3/library/profile.html#pstats.Stats.sort_stats
 # https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xvi-debugging-testing-and-profiling
 
@@ -40,6 +42,30 @@ def call_sequence():
     c = mysleep5(5) + mysleep3(3)
     print(c)
     return str(c)
+
+@app.route('/')
+def ui():
+    return render_template("index.html")
+
+
+@app.route('/data', methods=['POST', 'GET'])
+def data():
+    if request.method == 'POST':
+        return jsonify({"status": "success"})
+    elif request.method == 'GET':
+        params = request.args
+        print(params)
+        resp_data = [{"header1": "value11", "header2": "value12"},
+                {"header1": "value21", "header2": "value22"},
+                {"header1": "value31", "header2": "value32"}]
+        return jsonify(results=resp_data)
+
+
+@app.route('/params', methods=['GET'])
+def get_params():
+    params = {"param11": ["param21", "param22", "param23"], "param12": ["param24", "param25", "param26"]}
+    return jsonify(params)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

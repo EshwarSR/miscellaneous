@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope, $http) {
+        $http.get("/params").then(function (response) {
+            $scope.params = response.data;
+            $scope.param1s = Object.keys($scope.params);
+        });
+        $scope.submit = function(){
+            alert($scope.param1);
+            alert($scope.param2);
+            alert($scope.text1);
+            $http.get("/data?param1="+$scope.param1+"&param2="+$scope.param2+"&text1="+$scope.text1).then(function(response){
+            $scope.data = response.data["results"];
+            console.log($scope.data);
+            });
+         };
+    });
+    </script>
+</head>
+
+<body data-ng-app="myApp" data-ng-controller="myCtrl">
+
+{% raw %}
+
+<div data-ng-app="myApp" class="container">
+    <div data-ng-controller="myCtrl">
+        <div class="form-group">
+            <label>Param1:</label>
+            <select class="form-control input-lg" data-ng-model="param1" data-ng-options="param1 for param1 in param1s"></select>
+        </div>
+        <div class="form-group">
+            <label>Param2:</label>
+            <select class="form-control input-lg" data-ng-disabled="!param1" data-ng-model="param2" data-ng-options="param2 for param2 in params[param1]"></select>
+        </div>
+        <div class="form-group">
+            <input type="text" data-ng-model="text1">
+        </div>
+        <div class="form-group">
+            <button data-ng-click="submit()">Submit</button>
+        </div>
+
+        <table>
+            <tr data-ng-repeat="x in data">
+                <td>{{ x.header1 }}</td>
+                <td>{{ x.header2 }}</td>
+              </tr>
+        </table>
+    </div>
+</div>
+
+{% endraw %}
+
+</body>
+</html>
