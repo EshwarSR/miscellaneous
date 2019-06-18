@@ -6,7 +6,8 @@ from concurrent.futures import ThreadPoolExecutor
 from werkzeug.contrib.profiler import ProfilerMiddleware
 # from app import app
 app = Flask(__name__, template_folder="templates")
-
+import os
+deployment_env = os.environ["DEPLOYMENT_ENV"]
 # app.config['PROFILE'] = True
 # app.wsgi_app = ProfilerMiddleware(app.wsgi_app, sort_by=('tottime','time') ,restrictions=[30])
 """
@@ -30,6 +31,7 @@ def mysleep5(n):
 
 @app.route('/hello')
 def hello_world():
+    print("deployment_env", deployment_env)
     return 'Hello, World!'
 
 @app.route('/parallel')
@@ -82,5 +84,5 @@ if __name__ == "__main__":
 Prereqs:
 pip3 install flask gunicorn
 Run python sample_flask_app.py to run it in flask.
-Run gunicorn sample_flask_app:app -c gunicorn_sample_conf.ini.py to run it in gunicorn 
+Run gunicorn sample_flask_app:app -c gunicorn_sample_conf.ini.py -e DEPLOYMENT_ENV=DEV to run it in gunicorn 
 """
